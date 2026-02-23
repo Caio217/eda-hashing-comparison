@@ -1,5 +1,3 @@
-package hashing;
-
 public interface FuncaoHash<T> {
-	int hash(T input);
+	int hash(T key,int tableSize);
 } 

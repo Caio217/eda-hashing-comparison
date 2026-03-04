@@ -2,11 +2,12 @@ package hashing;
 
 import java.util.*;
 
-public class TabelaHashEnderecamentoAberto<K, V> {
+public class TabelaHash<K, V> {
 
     private Entry<K, V>[] tabela;
     private int size;
     private double fatorDeCarga;
+    private int colisoes;    
     private FuncaoHash<K> funcaoHash;
 
     public static final int CAPACIDADE_DEFAULT = 11;
@@ -14,11 +15,11 @@ public class TabelaHashEnderecamentoAberto<K, V> {
 
     private final Entry<K, V> APAGADO = new Entry<>(null, null);
 
-    public TabelaHashEnderecamentoAberto(FuncaoHash<K> funcao) {
+    public TabelaHash(FuncaoHash<K> funcao) {
         this(CAPACIDADE_DEFAULT, FATOR_DE_CARGA_DEFAULT, funcao);
     }
 
-    public TabelaHashEnderecamentoAberto(int capacidade, double fator, FuncaoHash<K> funcao){
+    public TabelaHash(int capacidade, double fator, FuncaoHash<K> funcao){
         if (fator <= 0 || fator >= 1)
             throw new IllegalArgumentException("Fator inválido!");
 
@@ -45,6 +46,7 @@ public class TabelaHashEnderecamentoAberto<K, V> {
                 return atual.valor;
                 
             sondagem++;
+            colisoes++;
         }   
 
         return null;
@@ -72,6 +74,7 @@ public class TabelaHashEnderecamentoAberto<K, V> {
             }
    
             sondagem++;
+            colisoes++;
         }
     }  
               
@@ -91,8 +94,9 @@ public class TabelaHashEnderecamentoAberto<K, V> {
                 this.size--;
                 return valor;
             } 
+
             sondagem++;
-        
+            colisoes++;
         }
 
         return null;
@@ -136,6 +140,23 @@ public class TabelaHashEnderecamentoAberto<K, V> {
         return this.size == 0;
     }
 
+    public int colisoes(){
+        return this.colisoes;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        for (int i = 0; i < tabela.length; i++)
+            if(tabela[i] != null && tabela[i] != APAGADO)
+                sb.append(i).append("= ").append(tabela[i].toString()).append(", ");
+        
+        if (sb.length() > 1) sb.setLength(sb.length() - 2);
+        sb.append("}");
+        return sb.toString();
+    }
+
     private static class Entry<K, V> {
         K chave;
         V valor;
@@ -144,5 +165,11 @@ public class TabelaHashEnderecamentoAberto<K, V> {
             this.chave = chave;
             this.valor = valor;
         }
+
+        @Override
+        public String toString() {
+            return chave + ": " + valor;
+        }
     }
+
 }

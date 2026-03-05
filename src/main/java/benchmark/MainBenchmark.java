@@ -1,11 +1,23 @@
 package benchmark;
 
-import org.openjdk.jmh.annotations.*;
+import hashing.*;
+import org.openjdk.jmh.annotations.*; 
+import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.results.format.ResultFormatType;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Benchmark)
@@ -13,10 +25,10 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class MainBenchmark {
 
-    @Param({"1000", "10000", "100000"})
+    @Param({"10000"})
     private int n;
 
-    @Param({"0.5", "0.75", "0.9"})
+    @Param({"0.5"})
     private double fatorCarga;
 
     @Param({""})
@@ -25,99 +37,191 @@ public class MainBenchmark {
     @Param({""})
     public String tipoHash;
 
+    @Param({""})
+    public String cenario;
+
+    @Param({"0"})
+    public int tamanho;
 
     private FuncaoHash hashing;
-    private HashTable tabelaParaBusca;
+    private TabelaHash tabelaParaBusca;
     private List<Object> dataset;
+    private int capacidadeInicial;
 
     @Setup(Level.Trial)
     public void setup() {
+        System.out.println("\n--- Setup: " + tipoHash + " | N: " + n + " | Tam: " + tamanho + " ---");
 
         switch (tipoHash) {
             case "DIVISAO":
-                //hashing = new DivisionFunction();
+                hashing = new HashDivisao();
                 break;
             case "MULTIPLICACAO":
-                //hashing = new MultiplyFunction();
+                hashing = new HashMultiplicacao();
                 break;
             case "POLINOMIAL":
                 hashing = new PolynomialFunction();
                 break;
-            case "FOLDING":
-                //hashing = new FoldingFunction();
+            case "MID-SQUARE":
+                //hashing = new HashMidSquare();
                 break;
-            // Adicionar outras funções...
+            case "DJB2":
+                hashing = new HashDJB2();
+                break;
+            default:
+                throw new IllegalArgumentException("Funcao Hash nao reconhecida: " + tipoHash);
         }
 
-        if ("INT".equals(tipoDado)) {
-            // dataset = InputGenerator.generateIntegers(n);
-        } else {
-            // dataset = InputGenerator.generateStrings(n); 
+        dataset = new ArrayList<>(n);
+        String nomeArquivo = "";
+        String caminho = "dataset/";
+        try {
+            if ("INT".equals(tipoDado)) {
+                nomeArquivo = "inteiros_" + n + "_" + tamanho + ".txt";
+
+                List<String> linhas = Files.readAllLines(Paths.get(caminho += nomeArquivo));
+                for (String linha : linhas) {
+                    dataset.add(Integer.parseInt(linha.trim()));
+                }
+            } else {
+                nomeArquivo = cenario.toLowerCase() + "_" + n + "_" + tamanho + ".txt"; 
+                List<String> linhas = Files.readAllLines(Paths.get(caminho += nomeArquivo));
+                dataset.addAll(linhas);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("ERRO FATAL: Arquivo nao encontrado: " + nomeArquivo, e);
         }
 
-        // tabelaParaBusca = new HashTable(16, fatorCarga, hashing);
-        // for (Object key : dataset) {
-        //     tabelaParaBusca.put(key, "valor_setup");
-        // }
-    }
+        capacidadeInicial = (int) (n / fatorCarga) + 1;
 
-    @Benchmark
-    public void testPut() {
-        // HashTable tabelaTeste = new HashTable(16, fatorCarga, hashing);
+        TabelaHash tabelaDiagnostico = new TabelaHash(capacidadeInicial, fatorCarga, hashing);
         
-        // for (Object key : dataset) {
-        //     tabelaTeste.put(key, "valor");
-        // }
+        for (Object key : dataset) { tabelaDiagnostico.put(key, "valor"); }
+        int colisoesPutReais = tabelaDiagnostico.getColisoesPut();
+        
+        for (Object key : dataset) { tabelaDiagnostico.get(key); }
+        int colisoesGetReais = tabelaDiagnostico.getColisoesGet();
+
+        for (Object key : dataset) { tabelaDiagnostico.remove(key); }
+        int colisoesRemoveReais = tabelaDiagnostico.getColisoesRemove();
+
+        System.out.println("\n📊 DIAGNÓSTICO DE COLISÕES (1 Passagem - " + n + " itens):");
+        System.out.println("   -> Colisões na Inserção (Put): " + colisoesPutReais);
+        System.out.println("   -> Saltos na Busca (Get): " + colisoesGetReais);
+        System.out.println("   -> Saltos na Remoção (Remove): " + colisoesRemoveReais);
+        System.out.println("=========================================================\n");
+
+        salvarEstatisticasCSV(colisoesPutReais, colisoesGetReais, colisoesRemoveReais);
+
+        tabelaParaBusca = new TabelaHash(capacidadeInicial, fatorCarga, hashing);
+        for (Object key : dataset) {
+             tabelaParaBusca.put(key, "valor_setup");
+        }
+    }
+
+    @TearDown(Level.Trial)
+    public void relatorioFinal() {
+        this.tabelaParaBusca.imprimirEstatisticas();
     }
 
     @Benchmark
-    public void testGetExistente() {
+    public void testPut(Blackhole bh) {
+        TabelaHash tabelaTeste = new TabelaHash(capacidadeInicial, fatorCarga, hashing);
+        
         for (Object key : dataset) {
-            // tabelaParaBusca.get(key);
+            tabelaTeste.put(key, "valor");
+        }
+        
+        bh.consume(tabelaTeste); 
+    }
+
+    @Benchmark
+    public void testGetExistente(Blackhole bh) {
+        for (Object key : dataset) {
+            bh.consume(tabelaParaBusca.get(key));
+        }
+    }
+
+    @Benchmark
+    public void testRemove(Blackhole bh) {
+        TabelaHash tabelaTeste = new TabelaHash(capacidadeInicial, fatorCarga, hashing);
+        
+        for (Object key : dataset) {
+            tabelaTeste.put(key, "valor");
+        }
+        
+        for (Object key : dataset) {
+            bh.consume(tabelaTeste.remove(key));
+        }
+    }
+
+    private void salvarEstatisticasCSV(int colPut, int colGet, int colRemove) {
+        String nomeArquivo = "resultados/estatisticas_colisoes.csv";
+        boolean arquivoExiste = new File(nomeArquivo).exists();
+
+        try (FileWriter fw = new FileWriter(nomeArquivo, true);
+             PrintWriter pw = new PrintWriter(fw)) {
+
+            if (!arquivoExiste) {
+                pw.println("Cenario,TipoHash,FatorCarga,N,Colisoes_Put,Colisoes_Get,Colisoes_Remove");
+            }
+
+            pw.printf("%s,%s,%s,%d,%d,%d,%d\n",
+                    cenario, tipoHash, fatorCarga, n, colPut, colGet, colRemove);
+
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar estatísticas: " + e.getMessage());
         }
     }
 
     public static void main(String[] args) throws Exception {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("===================================");
-        System.out.println("   BENCHMARK TABELA HASH - GRUPO 6  ");
-        System.out.println("===================================");
-        System.out.println("Escolha o cenario de teste:");
-        System.out.println("1 - Apenas Inteiros (Funcoes Matematicas)");
-        System.out.println("2 - Apenas Strings (Funcoes de Texto)");
-        System.out.println("3 - Teste Unificado (Todas as Funcoes)");
-        System.out.print("Sua escolha: ");
-        int escolha = sc.nextInt();
+    System.out.println("==========================================");
+    System.out.println(" INICIANDO AUTOMACAO - BENCHMARK GRUPO 6 ");
+    System.out.println("==========================================");
 
-        OptionsBuilder opt = new OptionsBuilder()
-                .include(MainBenchmark.class.getSimpleName())
-                .forks(1)
-                .warmupIterations(3)
-                .measurementIterations(5);
+    Properties config = new Properties();
+    try (FileInputStream fis = new FileInputStream("config.properties")) {
+        config.load(fis);
+        System.out.println("Arquivo config.properties lido com sucesso.");
+    } catch (IOException e) {
+        System.err.println("ERRO: Arquivo config.properties não encontrado na raiz!");
+        return;
+    }
 
-        if (escolha == 1) {
-            opt.param("tipoDado", "INT");
-            opt.param("tipoHash", "DIVISAO", "MULTIPLICACAO", "MID-SQUARE"); // Adicione Folding depois?
-            System.out.println("\nIniciando testes para Inteiros...");
-            
-        } else if (escolha == 2) {
-            opt.param("tipoDado", "STR");
-            opt.param("tipoHash", "POLINOMIAL"); // Adicione FOLDING depois?
-            System.out.println("\nIniciando testes para Strings...");
-            
-        } else if (escolha == 3) {
-            opt.param("tipoDado", "STR");
-            opt.param("tipoHash", "DIVISAO", "POLINOMIAL"); // Adicione todas depois
-            System.out.println("\nIniciando Teste Unificado (Stress Test)...");
-        } else {
-            System.out.println("Opção inválida. Encerrando.");
-            return;
-        }
+    String tipoDadoConfig = config.getProperty("tipoDado", "INT").toUpperCase();
+    String[] tiposHash = config.getProperty("tipoHash", "DIVISAO").split(",");
+    String[] tamanhosN = config.getProperty("n", "10000").split(",");
+    String[] fatoresCarga = config.getProperty("fatorCarga", "0.5").split(",");
 
-        //Executa testes
-        new Runner(opt.build()).run();
-        
-        //System.out.println("Gerando graficos...");
-        //Runtime.getRuntime().exec("python gerar_graficos.py");
+    String[] tamanhosEntrada;
+    String[] cenariosEntrada;
+
+    if (tipoDadoConfig.equals("INT")) {
+        tamanhosEntrada = config.getProperty("tamanhoInt", "7").split(",");
+        cenariosEntrada = new String[]{"NUMERICO"}; 
+        System.out.println("Modo INTEIROS: " + String.join(", ", tamanhosEntrada) + " digitos.");
+    } else {
+        tamanhosEntrada = config.getProperty("tamanhoStr", "10,50,100").split(",");
+        cenariosEntrada = config.getProperty("cenarioDados", "UNIFORME,PADRAO").split(",");
+        System.out.println("Modo STRINGS: " + String.join(", ", cenariosEntrada));
+    }
+
+    Options opt = new OptionsBuilder()
+            .include(MainBenchmark.class.getSimpleName())
+            .forks(1)
+            .warmupIterations(2)
+            .measurementIterations(3)
+            .param("tipoDado", tipoDadoConfig)
+            .param("tipoHash", tiposHash)
+            .param("n", tamanhosN)
+            .param("fatorCarga", fatoresCarga)
+            .param("cenario", cenariosEntrada)
+            .param("tamanho", tamanhosEntrada)
+            .resultFormat(ResultFormatType.CSV)
+            .result("resultados/resultados_benchmark.csv")
+            .build();
+
+        System.out.println("Iniciando bateria de testes do JMH...");
+        new Runner(opt).run();
     }
 }

@@ -7,7 +7,9 @@ public class TabelaHash<K, V> {
     private Entry<K, V>[] tabela;
     private int size;
     private double fatorDeCarga;
-    private int colisoes;    
+    private int colisoesPut;
+    private int colisoesGet;
+    private int colisoesRemove;    
     private FuncaoHash<K> funcaoHash;
 
     public static final int CAPACIDADE_DEFAULT = 11;
@@ -46,7 +48,7 @@ public class TabelaHash<K, V> {
                 return atual.valor;
                 
             sondagem++;
-            colisoes++;
+            this.colisoesGet++;
         }   
 
         return null;
@@ -74,7 +76,7 @@ public class TabelaHash<K, V> {
             }
    
             sondagem++;
-            colisoes++;
+            this.colisoesPut++;
         }
     }  
               
@@ -96,7 +98,7 @@ public class TabelaHash<K, V> {
             } 
 
             sondagem++;
-            colisoes++;
+            this.colisoesRemove++;
         }
 
         return null;
@@ -140,8 +142,16 @@ public class TabelaHash<K, V> {
         return this.size == 0;
     }
 
-    public int colisoes(){
-        return this.colisoes;
+    public int getColisoesGet() {
+        return this.colisoesGet;
+    }
+
+    public int getColisoesPut() {
+        return this.colisoesPut;
+    }
+
+    public int getColisoesRemove() {
+        return this.colisoesRemove;
     }
 
     @Override
@@ -155,6 +165,33 @@ public class TabelaHash<K, V> {
         if (sb.length() > 1) sb.setLength(sb.length() - 2);
         sb.append("}");
         return sb.toString();
+    }
+
+    public void imprimirEstatisticas() {
+        int ocupados = 0;
+        int vazios = 0;
+        int apagados = 0;
+
+        for (int i = 0; i < tabela.length; i++) {
+            if (tabela[i] == null) { 
+                vazios++;
+            } else if (tabela[i] == APAGADO) {
+                apagados++;
+            } else {
+                ocupados++;
+            }
+        }
+
+        System.out.println("\n--- ESTATÍSTICAS DA TABELA HASH ---");
+        System.out.println("Capacidade Total (Buckets): " + tabela.length);
+        System.out.println("Buckets Ocupados (Válidos): " + ocupados);
+        System.out.println("Buckets Apagados (Fantasmas): " + apagados);
+        System.out.println("Buckets Vazios (Null): " + vazios);
+        System.out.println("--- COLISÕES / SALTOS (Sondagem Aberta) ---");
+        System.out.println("Durante Inserções (Put): " + colisoesPut);
+        
+        double taxaOcupacaoFisica = ((double) (ocupados + apagados) / tabela.length) * 100;
+        System.out.printf("Taxa de Ocupação Real (Física): %.2f%%\n", taxaOcupacaoFisica);
     }
 
     private static class Entry<K, V> {

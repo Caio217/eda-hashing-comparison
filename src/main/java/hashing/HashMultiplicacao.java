@@ -2,12 +2,13 @@ package hashing;
 
 public class HashMultiplicacao<T> implements FuncaoHash<T> {
     
-    public static int hash(int chave, int tamanho){
-        if(chave  == null){
-            return trow new IllegalArgumentException("A chave não pode ser nula");
-        }
+    public int hash(T chave, int tamanho){
+//        if(chave  == null){
+            //return trow new IllegalArgumentException("A chave não pode ser nula");
+//        }
+        int hash = chave.hashCode();
         double A = (Math.sqrt(5) - 1) / 2; 
-        double frac = (chave * A) - Math.floor(chave * A);
+        double frac = (hash * A) - Math.floor(hash * A);
         return (int) Math.floor(frac * tamanho); 
     }
 }

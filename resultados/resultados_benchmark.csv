@@ -1,1 +1,10 @@
-"Benchmark","Mode","Threads","Samples","Score","Score Error (99,9%)","Unit"
+"Benchmark","Mode","Threads","Samples","Score","Score Error (99,9%)","Unit","Param: cenario","Param: fatorCarga","Param: n","Param: tamanho","Param: tipoDado","Param: tipoHash"
+"benchmark.MainBenchmark.testGetExistente","avgt",1,3,"116725,391348","20675,961040","ns/op",NUMERICO,0.5,10000,7,INT,MULTIPLICACAO
+"benchmark.MainBenchmark.testGetExistente","avgt",1,3,"238604,339489","155700,969258","ns/op",NUMERICO,0.75,10000,7,INT,MULTIPLICACAO
+"benchmark.MainBenchmark.testGetExistente","avgt",1,3,"268834,467289","129388,004056","ns/op",NUMERICO,0.9,10000,7,INT,MULTIPLICACAO
+"benchmark.MainBenchmark.testPut","avgt",1,3,"241540,249303","39431,805207","ns/op",NUMERICO,0.5,10000,7,INT,MULTIPLICACAO
+"benchmark.MainBenchmark.testPut","avgt",1,3,"310519,161594","199133,605346","ns/op",NUMERICO,0.75,10000,7,INT,MULTIPLICACAO
+"benchmark.MainBenchmark.testPut","avgt",1,3,"403190,973644","130037,875694","ns/op",NUMERICO,0.9,10000,7,INT,MULTIPLICACAO
+"benchmark.MainBenchmark.testRemove","avgt",1,3,"507024,861514","10035,500567","ns/op",NUMERICO,0.5,10000,7,INT,MULTIPLICACAO
+"benchmark.MainBenchmark.testRemove","avgt",1,3,"636698,475547","20714,699719","ns/op",NUMERICO,0.75,10000,7,INT,MULTIPLICACAO
+"benchmark.MainBenchmark.testRemove","avgt",1,3,"811680,958987","12716,117407","ns/op",NUMERICO,0.9,10000,7,INT,MULTIPLICACAO

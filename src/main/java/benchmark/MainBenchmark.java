@@ -63,7 +63,7 @@ public class MainBenchmark {
                 hashing = new PolynomialFunction();
                 break;
             case "MID-SQUARE":
-                //hashing = new HashMidSquare();
+                hashing = new HashMidSquare();
                 break;
             case "DJB2":
                 hashing = new HashDJB2();
@@ -75,21 +75,32 @@ public class MainBenchmark {
         dataset = new ArrayList<>(n);
         String nomeArquivo = "";
         String caminho = "dataset/";
+        
         try {
-            if ("INT".equals(tipoDado)) {
-                nomeArquivo = "inteiros_" + n + "_" + tamanho + ".txt";
+            
+            String tipoPrefixo = "INT".equals(tipoDado) ? "inteiro" : "string";
+            
+            String cenarioPrefixo = cenario.toLowerCase();
+            if (cenarioPrefixo.equals("numerico")) {
+                cenarioPrefixo = "uniforme";
+            }
 
-                List<String> linhas = Files.readAllLines(Paths.get(caminho += nomeArquivo));
+            nomeArquivo = tipoPrefixo + "_" + cenarioPrefixo + "_" + n + "_" + tamanho + ".txt";
+            
+            System.out.println("   -> Lendo arquivo: " + caminho + nomeArquivo);
+            
+            List<String> linhas = Files.readAllLines(Paths.get(caminho + nomeArquivo));
+            
+            if ("INT".equals(tipoDado)) {
                 for (String linha : linhas) {
                     dataset.add(Integer.parseInt(linha.trim()));
                 }
             } else {
-                nomeArquivo = cenario.toLowerCase() + "_" + n + "_" + tamanho + ".txt"; 
-                List<String> linhas = Files.readAllLines(Paths.get(caminho += nomeArquivo));
                 dataset.addAll(linhas);
             }
+            
         } catch (IOException e) {
-            throw new RuntimeException("ERRO FATAL: Arquivo nao encontrado: " + nomeArquivo, e);
+            throw new RuntimeException("ERRO FATAL: Arquivo nao encontrado: " + caminho + nomeArquivo, e);
         }
 
         capacidadeInicial = (int) (n / fatorCarga) + 1;

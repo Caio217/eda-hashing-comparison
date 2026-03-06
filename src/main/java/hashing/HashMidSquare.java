@@ -10,22 +10,22 @@ public class HashMidSquare<T> implements FuncaoHash<T> {
 
         long valor = input.hashCode();
 
-        long quadrado = valor * valor;
-
-        quadrado = Math.abs(quadrado);
+        long quadrado = Math.abs(valor * valor);
 
         String numero = String.valueOf(quadrado);
-
         int tamanho = numero.length();
         int meio = tamanho / 2;
 
-        int inicio = Math.max(0, meio - 1);
-        int fim = Math.min(tamanho, meio + 2);
+        int tamanhoJanela = 8;
+        int metadeJanela = tamanhoJanela / 2;
+
+        int inicio = Math.max(0, meio - metadeJanela);
+        int fim = Math.min(tamanho, meio + metadeJanela);
 
         String parteCentral = numero.substring(inicio, fim);
 
-        int valorCentral = Integer.parseInt(parteCentral);
+        long valorCentral = Long.parseLong(parteCentral);
 
-        return valorCentral % capacidade;
+        return (int) (valorCentral % capacidade);
     }
 }

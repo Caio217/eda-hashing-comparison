@@ -6,6 +6,9 @@ public class PolynomialFunction implements FuncaoHash<String> {
 
     @Override
     public int hash(String key,int tableSize) {
+    if (key == null) {
+        throw new IllegalArgumentException("Chave não pode ser nula");
+    }
         long hash = 0;
 
         for (int i = 0; i < key.length(); i++) {

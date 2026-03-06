@@ -196,7 +196,7 @@ public class TabelaHash<K, V> {
         System.out.println("Buckets Vazios (Null): " + vazios);
         System.out.println("--- COLISÕES / SALTOS (Sondagem Aberta) ---");
         System.out.println("Durante Inserções (Put): " + colisoesPut);
-        
+    
         double taxaOcupacaoFisica = ((double) (ocupados + apagados) / this.tabela.length) * 100;
         System.out.printf("Taxa de Ocupação Real (Física): %.2f%%\n", taxaOcupacaoFisica);
     }

@@ -1,0 +1,10 @@
+dontinline,*.*_all_jmhStub
+dontinline,*.*_avgt_jmhStub
+dontinline,*.*_sample_jmhStub
+dontinline,*.*_ss_jmhStub
+dontinline,*.*_thrpt_jmhStub
+inline,benchmark/MainBenchmark.relatorioFinal
+inline,benchmark/MainBenchmark.setup
+inline,benchmark/MainBenchmark.testGetExistente
+inline,benchmark/MainBenchmark.testPut
+inline,benchmark/MainBenchmark.testRemove

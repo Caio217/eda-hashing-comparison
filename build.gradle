@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'eda'
@@ -15,9 +16,16 @@ dependencies {
     annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
 }
 
+application {
+    // ATENÇÃO AQUI: Se a sua classe MainBenchmark estiver dentro de alguma pasta 
+    // (ex: package benchmark;), coloque 'benchmark.MainBenchmark'.
+    // Se não tiver "package" no topo do seu .java, coloque apenas 'MainBenchmark'.
+    mainClass = 'benchmark.MainBenchmark' 
+}
+
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }

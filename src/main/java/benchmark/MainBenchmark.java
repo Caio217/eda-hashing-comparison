@@ -204,6 +204,18 @@ public class MainBenchmark {
     String[] tamanhosN = config.getProperty("n", "10000").split(",");
     String[] fatoresCarga = config.getProperty("fatorCarga", "0.5").split(",");
 
+    for (String hashAtual : tiposHash) {
+            hashAtual = hashAtual.trim().toUpperCase();
+            
+            if (tipoDadoConfig.equals("INT")) {
+                if (hashAtual.equals("POLINOMIAL") || hashAtual.equals("DJB2")) {
+                    System.err.println("🚨 ERRO FATAL: A função " + hashAtual + " foi projetada para Strings e não suporta o tipo de dado INT.");
+                    System.err.println("Corrija o arquivo config.properties e tente novamente.");
+                    return;
+                }
+            }
+        }
+
     String[] tamanhosEntrada;
     String[] cenariosEntrada;
 

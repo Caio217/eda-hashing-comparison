@@ -1,7 +1,6 @@
 package dados;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
@@ -12,8 +11,6 @@ public class GeradorDeEntradas {
     private static final String PASTA_DATASET = "dataset/";
 
     public static void main(String[] args) {
-
-        criarPastaDataset();
 
         int[] quantidades = {10000, 100000, 1000000};
 
@@ -44,16 +41,6 @@ public class GeradorDeEntradas {
         }
 
         System.out.println("Todos os arquivos foram gerados com sucesso!");
-    }
-
-    // cria pasta dataset automaticamente
-    private static void criarPastaDataset() {
-
-        File pasta = new File(PASTA_DATASET);
-
-        if (!pasta.exists()) {
-            pasta.mkdirs();
-        }
     }
 
     // STRING

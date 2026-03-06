@@ -1,6 +1,7 @@
 package dados;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
@@ -8,8 +9,11 @@ import java.util.Random;
 public class GeradorDeEntradas {
 
     private static final Random gerador = new Random();
+    private static final String PASTA_DATASET = "dataset/";
 
     public static void main(String[] args) {
+
+        criarPastaDataset();
 
         int[] quantidades = {10000, 100000, 1000000};
 
@@ -18,7 +22,7 @@ public class GeradorDeEntradas {
 
         for (int quantidade : quantidades) {
 
-            //String
+            // STRINGS
             for (int tamanho : tamanhosString) {
                 try {
                     gerarArquivoStringUniforme(quantidade, tamanho);
@@ -28,7 +32,7 @@ public class GeradorDeEntradas {
                 }
             }
 
-            //INTEIROS
+            // INTEIROS
             for (int tamanho : tamanhosInteiro) {
                 try {
                     gerarArquivoInteiroUniforme(quantidade, tamanho);
@@ -42,11 +46,22 @@ public class GeradorDeEntradas {
         System.out.println("Todos os arquivos foram gerados com sucesso!");
     }
 
-    // String
+    // cria pasta dataset automaticamente
+    private static void criarPastaDataset() {
+
+        File pasta = new File(PASTA_DATASET);
+
+        if (!pasta.exists()) {
+            pasta.mkdirs();
+        }
+    }
+
+    // STRING
     private static void gerarArquivoStringUniforme(int quantidade, int tamanho)
             throws IOException {
 
-        String nomeArquivo = "string_uniforme_" + quantidade + "_" + tamanho + ".txt";
+        String nomeArquivo = PASTA_DATASET + "string_uniforme_" + quantidade + "_" + tamanho + ".txt";
+
         BufferedWriter escritor = new BufferedWriter(new FileWriter(nomeArquivo));
 
         for (int i = 0; i < quantidade; i++) {
@@ -60,7 +75,8 @@ public class GeradorDeEntradas {
     private static void gerarArquivoStringPadrao(int quantidade, int tamanho)
             throws IOException {
 
-        String nomeArquivo = "string_padrao_" + quantidade + "_" + tamanho + ".txt";
+        String nomeArquivo = PASTA_DATASET + "string_padrao_" + quantidade + "_" + tamanho + ".txt";
+
         BufferedWriter escritor = new BufferedWriter(new FileWriter(nomeArquivo));
 
         for (int i = 0; i < quantidade; i++) {
@@ -80,6 +96,7 @@ public class GeradorDeEntradas {
     private static String gerarStringAleatoria(int tamanho) {
 
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
         StringBuilder texto = new StringBuilder();
 
         for (int i = 0; i < tamanho; i++) {
@@ -98,10 +115,11 @@ public class GeradorDeEntradas {
     private static String gerarStringAnagrama(int tamanho) {
 
         String original = gerarStringAleatoria(tamanho);
+
         char[] caracteres = original.toCharArray();
 
-        // Embaralhamento simples (anagrama real)
         for (int i = 0; i < caracteres.length; i++) {
+
             int indiceAleatorio = gerador.nextInt(caracteres.length);
 
             char temp = caracteres[i];
@@ -112,12 +130,12 @@ public class GeradorDeEntradas {
         return new String(caracteres);
     }
 
-    // Inteiros
-
+    // INTEIROS
     private static void gerarArquivoInteiroUniforme(int quantidade, int tamanho)
             throws IOException {
 
-        String nomeArquivo = "inteiro_uniforme_" + quantidade + "_" + tamanho + ".txt";
+        String nomeArquivo = PASTA_DATASET + "inteiro_uniforme_" + quantidade + "_" + tamanho + ".txt";
+
         BufferedWriter escritor = new BufferedWriter(new FileWriter(nomeArquivo));
 
         for (int i = 0; i < quantidade; i++) {
@@ -131,7 +149,8 @@ public class GeradorDeEntradas {
     private static void gerarArquivoInteiroPadrao(int quantidade, int tamanho)
             throws IOException {
 
-        String nomeArquivo = "inteiro_padrao_" + quantidade + "_" + tamanho + ".txt";
+        String nomeArquivo = PASTA_DATASET + "inteiro_padrao_" + quantidade + "_" + tamanho + ".txt";
+
         BufferedWriter escritor = new BufferedWriter(new FileWriter(nomeArquivo));
 
         for (int i = 0; i < quantidade; i++) {

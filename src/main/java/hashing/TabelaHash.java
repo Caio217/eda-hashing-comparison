@@ -10,18 +10,18 @@ public class TabelaHash<K, V> {
     private int colisoesPut;
     private int colisoesGet;
     private int colisoesRemove;    
-    private FuncaoHash<K> funcaoHash;
+    private FuncaoHash funcaoHash;
 
     public static final int CAPACIDADE_DEFAULT = 11;
     public static final double FATOR_DE_CARGA_DEFAULT = 0.75;
 
     private final Entry<K, V> APAGADO = new Entry<>(null, null);
 
-    public TabelaHash(FuncaoHash<K> funcao) {
+    public TabelaHash(FuncaoHash funcao) {
         this(CAPACIDADE_DEFAULT, FATOR_DE_CARGA_DEFAULT, funcao);
     }
 
-    public TabelaHash(int capacidade, double fator, FuncaoHash<K> funcao){
+    public TabelaHash(int capacidade, double fator, FuncaoHash funcao){
         if (fator <= 0 || fator >= 1)
             throw new IllegalArgumentException("Fator inválido!");
 
@@ -34,8 +34,19 @@ public class TabelaHash<K, V> {
         this.size = 0;
     }
 
-    private int hash(K chave){
-        return funcaoHash.hash(chave, this.tabela.length);
+    private int hash(K chave) {
+        if (chave instanceof Long) {
+            return funcaoHash.hash((Long) chave, this.tabela.length);
+        } 
+        else if (chave instanceof String) {
+            return funcaoHash.hash((String) chave, this.tabela.length);
+        } 
+        else if (chave instanceof Integer) {
+            return funcaoHash.hash(((Integer) chave).longValue(), this.tabela.length);
+        } 
+        else {
+            return funcaoHash.hash(chave.toString(), this.tabela.length);
+        }
     }
 
     public V get(K chave) {
@@ -196,7 +207,7 @@ public class TabelaHash<K, V> {
         System.out.println("Buckets Vazios (Null): " + vazios);
         System.out.println("--- COLISÕES / SALTOS (Sondagem Aberta) ---");
         System.out.println("Durante Inserções (Put): " + colisoesPut);
-        
+    
         double taxaOcupacaoFisica = ((double) (ocupados + apagados) / this.tabela.length) * 100;
         System.out.printf("Taxa de Ocupação Real (Física): %.2f%%\n", taxaOcupacaoFisica);
     }

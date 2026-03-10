@@ -23,3 +23,4 @@ public class HashDJB2 implements FuncaoHash {
         return hash(String.valueOf(input), capacidade);
     }
 }
+

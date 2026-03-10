@@ -11,7 +11,7 @@ public class HashDivisao implements FuncaoHash {
     public int hash(String input, int capacidade) {
         if(input == null)
             throw new IllegalArgumentException("Chave nao pode ser null!");
-
+        
         long hashComoNumero = converterStringParaInt(input);
 
         return hash(hashComoNumero, capacidade);

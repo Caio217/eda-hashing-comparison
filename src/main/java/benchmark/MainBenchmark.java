@@ -93,7 +93,7 @@ public class MainBenchmark {
             
             if ("INT".equals(tipoDado)) {
                 for (String linha : linhas) {
-                    dataset.add(Integer.parseInt(linha.trim()));
+                    dataset.add(Long.parseLong(linha.trim()));
                 }
             } else {
                 dataset.addAll(linhas);
@@ -203,34 +203,23 @@ public class MainBenchmark {
     String[] tiposHash = config.getProperty("tipoHash", "DIVISAO").split(",");
     String[] tamanhosN = config.getProperty("n", "10000").split(",");
     String[] fatoresCarga = config.getProperty("fatorCarga", "0.5").split(",");
-
-    for (String hashAtual : tiposHash) {
-            hashAtual = hashAtual.trim().toUpperCase();
-            
-            if (tipoDadoConfig.equals("INT")) {
-                if (hashAtual.equals("POLINOMIAL") || hashAtual.equals("DJB2")) {
-                    System.err.println("🚨 ERRO FATAL: A função " + hashAtual + " foi projetada para Strings e não suporta o tipo de dado INT.");
-                    System.err.println("Corrija o arquivo config.properties e tente novamente.");
-                    return;
-                }
-            }
-        }
-
     String[] tamanhosEntrada;
     String[] cenariosEntrada;
 
     if (tipoDadoConfig.equals("INT")) {
         tamanhosEntrada = config.getProperty("tamanhoInt", "7").split(",");
-        cenariosEntrada = new String[]{"NUMERICO"}; 
-        System.out.println("Modo INTEIROS: " + String.join(", ", tamanhosEntrada) + " digitos.");
+        cenariosEntrada = config.getProperty("cenarioDados", "UNIFORME,PADRAO").split(","); 
+        System.out.println("Modo INTEIROS: " + String.join(", ", tamanhosEntrada) + " digitos | Cenários: " + String.join(", ", cenariosEntrada));
     } else {
         tamanhosEntrada = config.getProperty("tamanhoStr", "10,50,100").split(",");
         cenariosEntrada = config.getProperty("cenarioDados", "UNIFORME,PADRAO").split(",");
         System.out.println("Modo STRINGS: " + String.join(", ", cenariosEntrada));
     }
 
+    String regexInclusao = MainBenchmark.class.getSimpleName();
+
     Options opt = new OptionsBuilder()
-            .include(MainBenchmark.class.getSimpleName())
+            .include(regexInclusao)
             .forks(1)
             .warmupIterations(2)
             .measurementIterations(3)

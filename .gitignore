@@ -25,6 +25,6 @@ replay_pid*
 
 #Gradle
 .gradle/
-.build/
+build/
 dataset/*
 !dataset/.gitkeep

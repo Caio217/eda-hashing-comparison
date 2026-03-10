@@ -12,12 +12,20 @@ public class HashMidSquare implements FuncaoHash {
     }
 
     @Override
-    public int hash(String input, int capacidade) {
-        if (input == null)
+    public int hash(String key, int capacidade) {
+        if (key == null)
             throw new IllegalArgumentException("Chave não pode ser null");
 
-        long hashComoNumero = input.hashCode() & 0x7fffffff;
+        long hashComoNumero = converterStringParaInt(key);
 
         return hash(hashComoNumero, capacidade);
+    }
+
+    private int converterStringParaInt(String chave) {
+        int soma = 0;
+        for (int i = 0; i < chave.length(); i++) {
+            soma += chave.charAt(i);
+        }
+        return Math.abs(soma); 
     }
 }

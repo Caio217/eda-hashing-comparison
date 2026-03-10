@@ -1,15 +1,34 @@
 package hashing;
 
-public class HashMultiplicacao<T> implements FuncaoHash<T> {
+public class HashMultiplicacao implements FuncaoHash {
     
-    public int hash(T chave, int tamanho){
-//        if(chave  == null){
-            //return trow new IllegalArgumentException("chave não pode ser nula");
-//        }
-        int hash = chave.hashCode();
-        double A = (Math.sqrt(5) - 1) / 2; 
-        double frac = (hash * A) - Math.floor(hash * A);
-        return (int) Math.floor(frac * tamanho); 
+    private static final double A = (Math.sqrt(5) - 1) / 2;
+
+    @Override
+    public int hash(long input, int capacidade) {
+        long chavePositiva = Math.abs(input);
+        
+        double frac = (chavePositiva * A) - Math.floor(chavePositiva * A);
+        
+        return (int) Math.floor(frac * capacidade);
+    }
+
+    @Override
+    public int hash(String input, int capacidade) {
+        if (input == null)
+            throw new IllegalArgumentException("A chave não pode ser nula");
+
+        long hashComoNumero = converterStringParaInt(input);
+        
+        return hash(hashComoNumero, capacidade);
+    }
+
+    private int converterStringParaInt(String chave) {
+        int soma = 0;
+        for (int i = 0; i < chave.length(); i++) {
+            soma += chave.charAt(i);
+        }
+        return Math.abs(soma); 
     }
 }
 

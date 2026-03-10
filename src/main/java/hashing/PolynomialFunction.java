@@ -1,19 +1,26 @@
 package hashing;
 
-public class PolynomialFunction implements FuncaoHash<String> {
+public class PolynomialFunction implements FuncaoHash {
     private static final int BASE = 31;
     private static final long MOD = 1_000_000_007;
 
     @Override
-    public int hash(String key,int tableSize) {
-    if (key == null) {
-        throw new IllegalArgumentException("Chave não pode ser nula");
-    }
+    public int hash(String key, int tableSize) {
+        if (key == null) {
+            throw new IllegalArgumentException("Chave não pode ser nula");
+        }
+        
         long hash = 0;
 
         for (int i = 0; i < key.length(); i++) {
-            hash = (hash * this.BASE + key.charAt(i)) % this.MOD;
+            hash = (hash * BASE + key.charAt(i)) % MOD;
         }
-        return (int) (hash % tableSize);
+        
+        return Math.abs((int) (hash % tableSize));
+    }
+
+    @Override
+    public int hash(long key, int tableSize) {
+        return hash(String.valueOf(key), tableSize);
     }
 }

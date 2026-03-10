@@ -9,7 +9,7 @@ import java.util.Random;
 public class GeradorDeEntradas {
 
     private static final Random gerador = new Random();
-    private static final String PASTA_DATASET = "dataset/";
+    private static final String PASTA_DATASET = "../../../../dataset/";
 
     public static void main(String[] args) {
 
@@ -27,6 +27,7 @@ public class GeradorDeEntradas {
                 try {
                     gerarArquivoStringUniforme(quantidade, tamanho);
                     gerarArquivoStringPadrao(quantidade, tamanho);
+                    gerarArquivoStringAnagramas(quantidade, tamanho);
                 } catch (IOException e) {
                     System.out.println("Erro ao gerar arquivo String: " + e.getMessage());
                 }
@@ -70,6 +71,33 @@ public class GeradorDeEntradas {
         }
 
         escritor.close();
+    }
+
+    private static void gerarArquivoStringAnagramas(int quantidade, int tamanho) throws IOException {
+        String nomeArquivo = PASTA_DATASET + "string_anagramas_" + quantidade + "_" + tamanho + ".txt";
+        BufferedWriter escritor = new BufferedWriter(new FileWriter(nomeArquivo));
+
+        String palavraBase = gerarStringAleatoria(tamanho);
+        
+        for (int i = 0; i < quantidade; i++) {
+            escritor.write(embaralharString(palavraBase));
+            escritor.newLine();
+        }
+
+        escritor.close();
+    }
+
+    private static String embaralharString(String original) {
+        char[] caracteres = original.toCharArray();
+        
+        for (int i = caracteres.length - 1; i > 0; i--) {
+            int indiceAleatorio = gerador.nextInt(i + 1);
+            char temp = caracteres[i];
+            caracteres[i] = caracteres[indiceAleatorio];
+            caracteres[indiceAleatorio] = temp;
+        }
+
+        return new String(caracteres);
     }
 
     private static void gerarArquivoStringPadrao(int quantidade, int tamanho)

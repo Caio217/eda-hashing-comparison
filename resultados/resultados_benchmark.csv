@@ -1,4 +1,0 @@
-"Benchmark","Mode","Threads","Samples","Score","Score Error (99,9%)","Unit","Param: cenario","Param: fatorCarga","Param: n","Param: tamanho","Param: tipoDado","Param: tipoHash"
-"benchmark.MainBenchmark.testGetExistente","avgt",1,3,"113426,341965","21994,058731","ns/op",NUMERICO,0.5,10000,6,INT,MULTIPLICACAO
-"benchmark.MainBenchmark.testPut","avgt",1,3,"236737,890004","70187,277648","ns/op",NUMERICO,0.5,10000,6,INT,MULTIPLICACAO
-"benchmark.MainBenchmark.testRemove","avgt",1,3,"516108,776427","33828,200036","ns/op",NUMERICO,0.5,10000,6,INT,MULTIPLICACAO

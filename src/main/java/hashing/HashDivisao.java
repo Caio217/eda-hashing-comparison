@@ -1,15 +1,27 @@
 package hashing;
 
-public class HashDivisao<T> implements FuncaoHash<T> {
+public class HashDivisao implements FuncaoHash {
+
+    public int hash(long input, int capacidade) {
+        long chavePositiva = Math.abs(input); 
+        return (int) (chavePositiva % capacidade);
+    }
 
     @Override
-    public int hash(T input, int capacidade) {
+    public int hash(String input, int capacidade) {
         if(input == null)
-            throw new IllegalArgumentException("Chave null!");
+            throw new IllegalArgumentException("Chave nao pode ser null!");
 
-        int hash = input.hashCode();
-        hash = hash & 0x7fffffff;
+        long hashComoNumero = converterStringParaInt(input);
 
-        return hash % capacidade;
+        return hash(hashComoNumero, capacidade);
+    }
+
+    private int converterStringParaInt(String chave) {
+        int soma = 0;
+        for (int i = 0; i < chave.length(); i++) {
+            soma += chave.charAt(i);
+        }
+        return Math.abs(soma); 
     }
 }

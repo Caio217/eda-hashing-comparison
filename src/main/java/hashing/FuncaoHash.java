@@ -1,5 +1,6 @@
 package hashing;
 
-public interface FuncaoHash<T> {
-	int hash(T input, int capacidade);
-} 
+public interface FuncaoHash {
+    int hash(long key, int capacidade);
+    int hash(String key, int capacidade);
+}

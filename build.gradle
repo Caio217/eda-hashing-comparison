@@ -17,9 +17,6 @@ dependencies {
 }
 
 application {
-    // ATENÇÃO AQUI: Se a sua classe MainBenchmark estiver dentro de alguma pasta 
-    // (ex: package benchmark;), coloque 'benchmark.MainBenchmark'.
-    // Se não tiver "package" no topo do seu .java, coloque apenas 'MainBenchmark'.
     mainClass = 'benchmark.MainBenchmark' 
 }
 

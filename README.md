@@ -1,8 +1,30 @@
 # eda-hashing-comparison
-aqui breve Introducao sobre o que é o projeto...
 
-### Introdução
-introdução...
+## Introdução
+  O projeto tem como intuito fazer a análise de diferentes funções de hash e seus comportamentos dentro de uma tabela hash, utilizando como onjeto da análise os métodos básicos da tabela e como eles se comportam de acordo com a utilização dessas diferentes funções.
+
+## A tabela
+  A tabela foi feita para receber tipos genéricos de chave e objeto, facilitando assim o estudo do comportamento das funções de hash com entradas como int e String.
+  
+  Os métodos utilizam padrões similares aos utilizados na discilplina, sendo modificados para receberem os tipos genéricos, além de poucas modificações pontuais.
+
+  A tabela é inicializada de forma padrão com fator de carga 0.75 e capacidade 11, que é um número primo e sempre que é necessário um aumento no tamanho da tabela, esse se dá com um novo número primo (o próximo número primo maior que duas vezes o tamanho antigo da tabela), a utilização desses padrões (fator de carga e capacidade) são estratérgicos para minimizar colisões, já que com a utilizaçao de números primos a distribuiçao das chaves se dá de forma bem mais uniforme, além do fator de carga 0.75 que não deixa a tabela fazer os cálculos de hash com muitas posições da tabela já ocupadas. A soma dessas estratérgias faz com que o número de colisões na tabela seja em grande escala diminuido. 
+
+## As funções de hash
+  Foi criada uma interface "FuncaoHash" que foi implementada pelas funções específicas, facilitando para que se possa escolher a função a ser utilizada dentro da tabela.
+
+  ### Função de hash com divisão
+  Uma das funções mais básicas de hash, nada mais faz do que dividir o valor     da chave pela capacidade da tabela retornando como hash o resto dessa divisão. 
+  A função sofre as adaptações necessárias para o caso de chave String, para     retornar o valor de hash em inteiro (a conversão é realizada somando os          valores ASCII de cada caractere da String). 
+
+  ### Função de hash com multiplicação
+
+  ### Função de hash polinomial
+
+  ### Função de hash MidSquare
+
+  ### Função de hash DJB2
+  
 ## Resultado do BenchMark
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*

@@ -1,0 +1,1 @@
+./gradlew clean jar && java -jar build/libs/*.jar

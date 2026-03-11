@@ -9,7 +9,7 @@ import java.util.Random;
 public class GeradorDeEntradas {
 
     private static final Random gerador = new Random();
-    private static final String PASTA_DATASET = "../../../../dataset/";
+    private static final String PASTA_DATASET = "dataset/";
 
     public static void main(String[] args) {
 

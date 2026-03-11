@@ -19,12 +19,6 @@ application {
     mainClass = 'benchmark.MainBenchmark' 
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     
@@ -37,4 +31,14 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+tasks.register('gerarDados', JavaExec) {
+    group = 'eda'
+    description = 'Gera os arquivos de texto de entrada para o benchmark'
+    
+    mainClass = 'dados.GeradorDeEntradas' 
+    
+    classpath = sourceSets.main.runtimeClasspath
+     
 }

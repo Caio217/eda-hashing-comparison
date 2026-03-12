@@ -106,11 +106,11 @@ Ou uma analise Geral dos graficos de Int
 
 ### Introdução aos Cenários com Strings
 
-Diferente de chaves numéricas, o tratamento de textos (Strings) exige algoritmos que considerem não apenas os caracteres, mas também sua ordem. Para este experimento, os testes foram escalados em volumes de 10 mil, 100 mil e 1 milhão de elementos.
+  Diferente de chaves numéricas, o tratamento de textos (Strings) exige algoritmos que considerem não apenas os caracteres, mas também sua ordem. Para este experimento, os testes foram escalados em volumes de 10 mil, 100 mil e 1 milhão de elementos.
 
 ### Nota sobre a Metodologia: 
 
-Visando viabilizar a coleta de dados e o tempo total de execução do benchmark, optou-se por fixar o tamanho das chaves em 10 caracteres. Essa redução na variedade de parâmetros foi necessária devido à alta latência observada nas funções mais simples; sem essa limitação, o tempo de execução para volumes maiores tornaria a automação do experimento inviável. Os testes foram aplicados sob dois cenários: Uniforme e Anagramas, permitindo observar como cada função lida com a entropia do texto conforme o volume de dados cresce.
+  Visando viabilizar a coleta de dados e o tempo total de execução do benchmark, optou-se por fixar o tamanho das chaves em 10 caracteres. Essa redução na variedade de parâmetros foi necessária devido à alta latência observada nas funções mais simples; sem essa limitação, o tempo de execução para volumes maiores tornaria a automação do experimento inviável. Os testes foram aplicados sob dois cenários: Uniforme e Anagramas, permitindo observar como cada função lida com a entropia do texto conforme o volume de dados cresce.
 
 ## Colisões
 
@@ -136,11 +136,11 @@ Visando viabilizar a coleta de dados e o tempo total de execução do benchmark,
 </a>
 
 ### Análise de Colisões (Gráficos de 10k, 100k e 1M)
-Ao observar o conjunto de gráficos de colisões, fica clara a diferença de lidar com esse tipo de dado entre os algoritmos para o tipo String:
+  Ao observar o conjunto de gráficos de colisões, fica clara a diferença de lidar com esse tipo de dado entre os algoritmos para o tipo String:
 
-O Colapso das Funções Simples: As funções Divisão, Multiplicação e Mid-Square apresentam uma quantidade massiva de colisões (escala de milhões) desde os volumes iniciais. Isso ocorre porque elas não processam a posição dos caracteres, sofrendo severamente no cenário de Anagramas.
+  O Colapso das Funções Simples: As funções Divisão, Multiplicação e Mid-Square apresentam uma quantidade massiva de colisões (escala de milhões) desde os volumes iniciais. Isso ocorre porque elas não processam a posição dos caracteres, sofrendo severamente no cenário de Anagramas.
 
-A Estabilidade de DJB2 e Polinomial: Ambas mantiveram índices de colisão extremamente baixos e constantes. Como utilizam o processamento posicional (Método de Horner e constantes primas), elas garantem que strings diferentes quase nunca ocupem o mesmo índice, mantendo a Tabela Hash saudável mesmo com 1 milhão de elementos.
+  A Estabilidade de DJB2 e Polinomial: Ambas mantiveram índices de colisão extremamente baixos e constantes. Como utilizam o processamento posicional (Método de Horner e constantes primas), elas garantem que strings diferentes quase nunca ocupem o mesmo índice, mantendo a Tabela Hash saudável mesmo com 1 milhão de elementos.
 
 ## Desempenho(Tempo de execução)
 ### Desempenho_10k:
@@ -164,10 +164,16 @@ A Estabilidade de DJB2 e Polinomial: Ambas mantiveram índices de colisão extre
 
 ### Analise de Desempenho
 
-Esta seção detalha o comportamento das funções hash frente à Sondagem Linear. Como essa estratégia exige a busca de slots adjacentes em caso de colisão, a eficiência do sistema depende diretamente da qualidade da distribuição dos índices.
+  Esta seção detalha o comportamento das funções hash frente à Sondagem Linear. Como essa estratégia exige a busca de slots adjacentes em caso de colisão, a eficiência do sistema depende diretamente da qualidade da distribuição dos índices.
 
-1. O Impacto do Agrupamento PrimárioQuando as funções Divisão, Multiplicação e Mid-Square geram agrupamentos (especialmente em cenários de Anagramas), ocorre o fenômeno de Agrupamento Primário (primary clustering).Isso preenche a tabela com blocos contíguos de dados, obrigando o algoritmo a percorrer um número crescente de posições a cada operação. Esse efeito cascata degrada a performance de $O(1)$ para $O(n)$, explicando o aumento drástico no tempo de execução observado nos gráficos.
+1. O Impacto do Agrupamento Primário
 
-2. Resiliência das Funções Especializadas (DJB2 e Polinomial)As funções DJB2 e Polinomial mantiveram desempenho estável ao distribuir as chaves de forma uniforme. Ao minimizar o agrupamento, elas permitem que a Sondagem Linear encontre um slot disponível rapidamente, mantendo os tempos de acesso próximos ao esperado para $O(1)$, independentemente do volume de dados.
+  Quando as funções Divisão, Multiplicação e Mid-Square geram agrupamentos (especialmente em cenários de Anagramas), ocorre o fenômeno de Agrupamento Primário (primary clustering).Isso preenche a tabela com blocos contíguos de dados, obrigando o algoritmo a percorrer um número crescente de posições a cada operação. Esse efeito cascata degrada a performance de $O(1)$ para $O(n)$, explicando o aumento drástico no tempo de execução observado nos gráficos.
 
-3. Inviabilidade Técnica no Volume de 1 MilhãoNos testes com 1 milhão de elementos, as funções Divisão, Multiplicação e Mid-Square não tiveram seus dados coletados.Com o aumento da carga, o tempo necessário para encontrar um slot vazio em uma tabela com alto índice de agrupamento tornou-se proibitivo para o JMH.A interrupção desses testes foi uma decisão metodológica para garantir a viabilidade da automação, confirmando que tais funções são tecnicamente inadequadas para grandes volumes de dados do tipo String sob a estratégia de sondagem linear.
+2. Resiliência das Funções Especializadas (DJB2 e Polinomial)
+
+  As funções DJB2 e Polinomial mantiveram desempenho estável ao distribuir as chaves de forma uniforme. Ao minimizar o agrupamento, elas permitem que a Sondagem Linear encontre um slot disponível rapidamente, mantendo os tempos de acesso próximos ao esperado para $O(1)$, independentemente do volume de dados.
+
+3. Inviabilidade Técnica no Volume de 1 Milhão
+
+  Nos testes com 1 milhão de elementos, as funções Divisão, Multiplicação e Mid-Square não tiveram seus dados coletados.Com o aumento da carga, o tempo necessário para encontrar um slot vazio em uma tabela com alto índice de agrupamento tornou-se proibitivo para o JMH.A interrupção desses testes foi uma decisão metodológica para garantir a viabilidade da automação, confirmando que tais funções são tecnicamente inadequadas para grandes volumes de dados do tipo String sob a estratégia de sondagem linear.

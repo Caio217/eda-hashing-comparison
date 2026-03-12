@@ -18,6 +18,7 @@
   A função sofre as adaptações necessárias para o caso de chave String, para     retornar o valor de hash em inteiro (a conversão é realizada somando os          valores ASCII de cada caractere da String). 
 
   ### Função de hash com multiplicação
+  Função hash que utiliza uma constante fracionária para embaralhar a chave e melhor distribuição dos hashes, funcionando bem para qualquer capacidade da tabela. A constante recomendada é a razão áurea(A ≈ 0.6180339887), sugerida por Knuth por produzir distribuição uniforme.
 
   ### Função de hash polinomial
 

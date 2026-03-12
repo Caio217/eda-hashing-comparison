@@ -20,34 +20,53 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * Classe principal de automação de testes utilizando JMH (Java Microbenchmark Harness).
+ * <p>Mede o tempo médio de execução (em nanossegundos) e contabiliza colisões
+ * para as operações de inserção, busca e remoção em uma Tabela Hash, 
+ * variando parâmetros como Função Hash, tamanho da entrada e fator de carga.</p>
+ */
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class MainBenchmark {
 
+    /** Quantidade de elementos (N) a serem processados no teste. */
     @Param({"10000"})
     private int n;
 
+    /** Fator de carga utilizado para dimensionar a capacidade inicial da tabela. */
     @Param({"0.5"})
     private double fatorCarga;
 
+    /** Tipo de dado avaliado (ex: INT, STR). */
     @Param({""})
     public String tipoDado;
 
+    /** Algoritmo de hash a ser utilizado (ex: DIVISAO, DJB2). */
     @Param({""})
     public String tipoHash;
 
+    /** Cenário de distribuição dos dados (ex: UNIFORME, PADRAO). */
     @Param({""})
     public String cenario;
 
+    /** Tamanho em caracteres/dígitos dos elementos gerados. */
     @Param({"0"})
     public int tamanho;
-
+    
     private FuncaoHash hashing;
     private TabelaHash tabelaParaBusca;
     private List<Object> dataset;
     private int capacidadeInicial;
 
+    /**
+     * Prepara o ambiente antes do início de cada bateria de testes do JMH.
+     * <p>Instancia a função hash correta, carrega o dataset do disco e realiza 
+     * uma passagem de diagnóstico silenciosa para isolar a contagem de colisões 
+     * da medição de tempo oficial do benchmark.</p>
+     */
     @Setup(Level.Trial)
     public void setup() {
         System.out.println("\n--- Setup: " + tipoHash + " | N: " + n + " | Tam: " + tamanho + " ---");
@@ -130,11 +149,20 @@ public class MainBenchmark {
         }
     }
 
+    /**
+     * Finaliza o ambiente após a execução da bateria de testes, 
+     * exibindo as estatísticas gerais da Tabela Hash em memória.
+     */
     @TearDown(Level.Trial)
     public void relatorioFinal() {
         this.tabelaParaBusca.imprimirEstatisticas();
     }
 
+    /**
+     * Avalia o desempenho computacional da operação de inserção (Put).
+     *
+     * @param bh Consome o objeto gerado para evitar o descarte por otimização da JVM.
+     */
     @Benchmark
     public void testPut(Blackhole bh) {
         TabelaHash tabelaTeste = new TabelaHash(capacidadeInicial, fatorCarga, hashing);
@@ -146,6 +174,12 @@ public class MainBenchmark {
         bh.consume(tabelaTeste); 
     }
 
+    /**
+     * Avalia o desempenho computacional da operação de busca (Get).
+     * Opera sobre uma tabela previamente populada no método setup.
+     *
+     * @param bh Consome o resultado da busca para forçar a execução efetiva.
+     */
     @Benchmark
     public void testGetExistente(Blackhole bh) {
         for (Object key : dataset) {
@@ -153,6 +187,12 @@ public class MainBenchmark {
         }
     }
 
+    /**
+     * Avalia o desempenho computacional da operação de exclusão (Remove).
+     * Popula uma tabela temporária e, em seguida, mede o custo de remover os elementos.
+     *
+     * @param bh Consome o retorno da operação de remoção.
+     */
     @Benchmark
     public void testRemove(Blackhole bh) {
         TabelaHash tabelaTeste = new TabelaHash(capacidadeInicial, fatorCarga, hashing);
@@ -166,6 +206,14 @@ public class MainBenchmark {
         }
     }
 
+    /**
+     * Grava os resultados de diagnóstico de colisões em um arquivo CSV.
+     * Facilita a posterior geração de gráficos analíticos.
+     *
+     * @param colPut    Número de colisões ocorridas nas inserções.
+     * @param colGet    Número de "saltos" necessários durante as buscas.
+     * @param colRemove Número de "saltos" necessários durante as remoções.
+     */
     private void salvarEstatisticasCSV(int colPut, int colGet, int colRemove) {
         String nomeArquivo = "resultados/estatisticas_colisoes.csv";
         boolean arquivoExiste = new File(nomeArquivo).exists();
@@ -185,6 +233,14 @@ public class MainBenchmark {
         }
     }
 
+    /**
+     * Ponto de entrada (Main) para inicialização do Benchmark JMH.
+     * Lê dinamicamente as configurações via arquivo properties e delega 
+     * a execução das medições ao Runner do JMH.
+     *
+     * @param args Argumentos de linha de comando (não utilizados diretamente).
+     * @throws Exception Caso ocorra erro crítico na leitura do arquivo ou na execução do JMH.
+     */
     public static void main(String[] args) throws Exception {
     System.out.println("==========================================");
     System.out.println(" INICIANDO AUTOMACAO - BENCHMARK GRUPO 6 ");

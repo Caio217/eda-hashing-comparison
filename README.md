@@ -49,7 +49,7 @@ A Partir dos resultados obtidos no experimento, foram gerados gráficos que most
 
 ### Gráficos + Análises (Execução):
 
-Analise Get_fatordecarga
+#### Gráfico GetAll fatordecarga
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/58a7e5f6-c46b-4848-a885-6e00d8ae7307" target="_blank">
   <img src="https://github.com/user-attachments/assets/58a7e5f6-c46b-4848-a885-6e00d8ae7307" alt="Get_Fatordecarga" width="100%" />
@@ -60,7 +60,7 @@ A função Mid-Square apresentou desempenho significativamente inferior em todos
 As funções DJB2 e Polinomial apresentaram desempenho intermediário. Embora consigam manter tempos de resposta controlados em tabelas menores ou com baixa ocupação, elas demonstram uma perda de eficiência acentuada quando o fator de carga atinge 0.9.  
 
 
-Analise GetAll_tamanho
+#### Gráfico GetAll tamanho
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/94c35309-935c-4db8-9947-963e98311fb9" target="_blank">
   <img src="https://github.com/user-attachments/assets/94c35309-935c-4db8-9947-963e98311fb9" alt="Get_tamanho" width="100%" />
@@ -71,8 +71,7 @@ De acordo com o gráfico, os métodos de Divisão e Multiplicação apresentaram
 A função Mid-Square apresentou desempenho significativamente inferior em todos os cenários de tamanho de entrada. O tempo médio por operação escalou de forma agressiva conforme o volume de dados aumentou, atingindo picos próximos a 1 segundo no cenário de 1M de elementos.
 As funções DJB2 e Polinomial apresentaram desempenho intermediário. Embora consigam manter uma performance aceitável com entradas menores e volumes baixos, elas mostram uma sensibilidade maior ao aumento do tamanho das chaves e do conjunto de dados.
 
-
-Analise PutAll_Fatordecarga
+#### Gráfico PutAll Fatordecarga
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/5f0b43ed-7e43-4b98-9724-9b554197701c" target="_blank">
@@ -82,7 +81,7 @@ Analise PutAll_Fatordecarga
 Neste gráfico o Fator de Carga(fc) revela um impacto significativo ao tempo de execuções das funções. Em fc = 0.5 todos os hashes mantêm um tempo de execução mesmo ao aumentar a quantidade das entradas, o MID-SQUARE em especial não explode se compararmos com os testes por tamanho de entrada. Em fc = 0.75 as funções continuam se comportando bem mesmo com o aumento do fator de carga. Já em fc = 0.9 a situação de todas piora, com o destaque do aumento significativo para DJB2 e POLINOMIAL que se aproximam de 1s para entradas de 1000000. 
 DIVISÃO e MULTIPLICAÇÃO mantém o crescimento de suas barras de forma proporcional ao n, que é o comportamento ideal para uma tabela hash.
 
-Analise PutAll_tamanho
+#### Gráfico PutAll tamanho
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/5b081318-a542-4100-89d9-fc087529518e" target="_blank">
@@ -91,7 +90,7 @@ Analise PutAll_tamanho
 
 O gráfico mostra consistência para todos os tamanhos de entradas, com destaque para as funções de MULTIPLICAÇÃO e DIVISÃO, que mantém tempos em centenas de microssegundos mesmo para quantidade 1000000 de entradas, enquanto se destaca negativamente o MID-SQUARE, que em testes com 100k de entradas já explode chegando a centenas de milissegundos e também é perceptível que em 9 dígitos o mesmo piora relativamente mais que os outros. No cenário UNIFORME as funções DJB2 E POLINOMIAL sobem significativamente em 1000000. O cenário PADRÃO é mais rápido para quase todos os hashes, em exceção ao MID-SQUARE e ao DJB2 para entradas de 100k.
 
-Analise RemoveAll_Fatordecarga
+#### Gráfico RemoveAll Fatordecarga
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/f84be536-c9a2-4655-b78f-ad0625fad9cf" target="_blank">
@@ -100,7 +99,7 @@ Analise RemoveAll_Fatordecarga
 
 Este gráfico mostra melhor a sensibilidade ao Fator de Carga(fc) das funções hashes. Em fc = 0.5 o cenário é mais tranquilo, até o MID-SQUARE fica na casa das centenas de milissegundos em 1000000, o que ainda é controlável. Em fc = 0.75 a comparação entre os hashes continua clara, com MID-SQUARE pior que os demais em 10k e 100k de entradas, já para 1000000 de entradas o POLINOMIAL explode, o que pode indicar um ponto crítico da função. Em fc = 0.9 todos estão piorando, MID-SQUARE e POLINOMIAL ultrapassam 1s em 1000000, e DJB2 tem cenário próximo a isso. O POLINOMIAL supera o MID-SQUARE em alguns casos de remoção UNIFORME para fc = 0.9 o que indica que para remoções com tabela muito cheia e distribuição aleatória, o POLINOMIAL tem comportamento ruim. DIVISÃO e MULTIPLICAÇÃO continuam com tempo consideravelmente pequeno , na casa dos milissegundos, confirmando ser escolhas seguras.
 
-Analise RemoveAll_tamanho
+#### Gráfico RemoveAll tamanho
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/ebeb69e9-4fff-446c-85e2-ba61f9858eaf" target="_blank">
@@ -110,7 +109,7 @@ Analise RemoveAll_tamanho
 A remoção demonstra um quadro mais dramático que a inserção. O MID-SQUARE em 1000000 atinge valores acima de 1s para todos tamanhos e o POLINOMIAL no cenário UNIFORME sobe agressivamente, ultrapassando 1s no tamanho de 6 dígitos e mantém-se próximo nos demais. A informação mais interessante é que o DJB2 no UNIFORME aparece visivelmente abaixo que no PADRÃO, sugerindo que o mesmo lida melhor com chaves aleatórias que com chaves padrões. A DIVISÃO e MULTIPLICAÇÃO continuam sendo mais estáveis, variando em tempo na casa dos milissegundos mesmo em 1000000.
 
 ### Gráficos + Análises (Colisões):
-Analise colisoes getAll
+#### Gráfico colisoes getAll
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/0a089fa5-16fe-4294-8d08-82cfd8440be2" target="_blank">
@@ -122,7 +121,7 @@ As funções DJB2 e Polinomial apresentaram desempenho intermediário, com cresc
 Por outro lado, a função Mid-Square demonstrou desempenho significativamente inferior, apresentando um número muito elevado de colisões em todos os cenários analisados.
 
 
-Analise colisoes putAll
+#### Gráfico colisoes putAll
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/e3755ba6-d47c-43ee-87dc-3a4c1234dc08" target="_blank">
@@ -133,7 +132,7 @@ Conforme mostra o gráfico, os métodos de Divisão e Multiplicação apresentar
 A função Mid-Square apresentou desempenho significativamente inferior em todos os cenários analisados. O número de colisões gerado por essa técnica foi consideravelmente maior quando comparado às demais funções.
 As funções DJB2 e Polinomial apresentaram desempenho intermediário. Embora o número de colisões aumente conforme o fator de carga e o tamanho da tabela crescem, essas funções ainda conseguem manter um comportamento mais equilibrado do que o observado na função Mid-Square.
 
-Analise colisoes removeAll
+#### Gráfico colisoes removeAll
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/751daa0b-ca14-48fa-b850-9f848c43a8df" target="_blank">
@@ -154,66 +153,73 @@ As funções DJB2 e Polinomial apresentaram desempenho intermediário. Embora co
 
 ## Colisões
 
-### Colisoes_10k:
+#### Colisoes_10k:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
-<a href="https://github.com/user-attachments/assets/f8138afb-a6cd-413d-b9cd-85a74d40c93d" target="_blank">
-  <img src="https://github.com/user-attachments/assets/f8138afb-a6cd-413d-b9cd-85a74d40c93d" alt="Colisoes_10k" width="100%" />
+<a href="https://github.com/user-attachments/assets/b8225304-b196-4067-b17e-13d87e3b12e4" target="_blank">
+  <img src="https://github.com/user-attachments/assets/b8225304-b196-4067-b17e-13d87e3b12e4" alt="Colisoes_10k" width="100%" />
 </a>
 
-### Colisoes_100k:
+#### Análise 10k:
+  
+  Neste volume inicial, o gráfico (em escala logarítmica) já escancara a ineficiência das funções mais simples. As funções Divisão, Multiplicação e Mid-Square apresentam colisões na casa dos milhões, com um salto drástico no cenário de Anagramas (barras listradas). Enquanto isso, DJB2 e Polinomial mantêm as colisões na casa dos milhares, mostrando que o espalhamento posicional evita o agrupamento precoce.
+
+#### Colisoes_100k:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/1deaf224-4108-460a-ad27-592d7579798d" target="_blank">
   <img src="https://github.com/user-attachments/assets/1deaf224-4108-460a-ad27-592d7579798d" alt="Colisoes_100k" width="100%" />
 </a>
 
-### Colisoes_1M:
+#### Análise 100k:
+
+  Com o aumento de $n$, a situação das funções simples se torna insustentável. O volume de colisões para Divisão, Multiplicação e Mid-Square ultrapassa a marca de centenas de milhões. Aqui, a Sondagem Linear começa a enfrentar gargalos severos, pois o alto índice de ocupação contígua na tabela gera cadeias de busca imensas para as chaves mal distribuídas. DJB2 e Polinomial permanecem estáveis e quase invisíveis perto das outras no gráfico.
+
+#### Colisoes_1M:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/4bf7f9dc-2d99-44f6-a7d2-0357e41bd63b" target="_blank">
   <img src="https://github.com/user-attachments/assets/4bf7f9dc-2d99-44f6-a7d2-0357e41bd63b" alt="Colisoes_1M" width="100%" />
 </a>
 
-### Análise de Colisões (Gráficos de 10k, 100k e 1M)
-  Ao observar o conjunto de gráficos de colisões, fica clara a diferença de lidar com esse tipo de dado entre os algoritmos para o tipo String:
+#### Análise 1M:
 
-  O Colapso das Funções Simples: As funções Divisão, Multiplicação e Mid-Square apresentam uma quantidade massiva de colisões (escala de milhões) desde os volumes iniciais. Isso ocorre porque elas não processam a posição dos caracteres, sofrendo severamente no cenário de Anagramas.
-
-  A Estabilidade de DJB2 e Polinomial: Ambas mantiveram índices de colisão extremamente baixos e constantes. Como utilizam o processamento posicional (Método de Horner e constantes primas), elas garantem que strings diferentes quase nunca ocupem o mesmo índice, mantendo a Tabela Hash saudável mesmo com 1 milhão de elementos.
+  O detalhe mais importante deste gráfico é quem não está nele. As funções Divisão, Multiplicação e Mid-Square foram omitidas, pois seu nível de colisão tornou a execução inviável. Sobraram apenas DJB2 e Polinomial, que demonstram uma escalabilidade real: para 1 milhão de elementos, as colisões totais flutuam entre 1.2M e 1.8M (aprox. 1 a 2 colisões por operação), um índice excelente que mantém a estrutura de dados saudável e rápida.
 
 ## Desempenho(Tempo de execução)
-### Desempenho_10k:
+#### Desempenho_10k:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
-<a href="https://github.com/user-attachments/assets/0b41e3bd-e141-48f6-b456-da5d981b90a2" target="_blank">
-  <img src="https://github.com/user-attachments/assets/0b41e3bd-e141-48f6-b456-da5d981b90a2" alt="Desempenho_10k" width="100%" />
+<a href="https://github.com/user-attachments/assets/f50bca23-d21d-4ee6-84e9-62f95f203f0c" target="_blank">
+  <img src="https://github.com/user-attachments/assets/f50bca23-d21d-4ee6-84e9-62f95f203f0c" alt="Desempenho_10k" width="100%" />
 </a>
-### Desempenho_100k:
+
+#### Análise de Desempenho 10k:
+
+  Mesmo com um volume inicial considerado pequeno, a diferença de tempo de execução já é gritante. Enquanto DJB2 e Polinomial resolvem as operações na casa dos microssegundos ($\approx 1000\mu s$), as funções Divisão e Mid-Square já operam na escala de segundos. Um destaque importante é a função Multiplicação, que apresenta um tempo razoável no cenário Uniforme, mas seu desempenho colapsa (saltando para $\approx 1.0s$) quando submetida aos Anagramas (barras listradas). Isso comprova que o custo de sondar posições adjacentes na memória devido a colisões é muito maior do que o custo computacional de calcular um Hash posicional mais complexo.
+
+#### Desempenho_100k:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
-<a href="https://github.com/user-attachments/assets/a515f771-33f0-4b46-a50d-98f66bb2fc01" target="_blank">
-  <img src="https://github.com/user-attachments/assets/a515f771-33f0-4b46-a50d-98f66bb2fc01" alt="Desempenho_100k" width="100%" />
+<a href="https://github.com/user-attachments/assets/8535e2ea-e58d-4588-9a16-2fa656bc2ffa" target="_blank">
+  <img src="https://github.com/user-attachments/assets/8535e2ea-e58d-4588-9a16-2fa656bc2ffa" alt="Desempenho_100k" width="100%" />
 </a>
-### Desempenho_1M:
+
+#### Análise de Desempenho 100k:
+
+  Neste cenário, a degradação de performance das funções não-posicionais se torna extrema. Os tempos médios das funções Divisão, Multiplicação e Mid-Square disparam, chegando a registrar até 100 segundos por operação em alguns casos. Essa latência absurda confirma a transição da complexidade esperada de $O(1)$ para um degradante $O(n)$. O agrupamento primário (primary clustering) na tabela gerou listas contíguas tão longas que o algoritmo passa a maior parte do tempo apenas procurando um slot livre. DJB2 e Polinomial continuam inabaláveis, na parte mais baixa do gráfico.
+
+#### Desempenho_1M:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/abdb79c2-0a63-4975-b7d1-05cb07423c33" target="_blank">
   <img src="https://github.com/user-attachments/assets/abdb79c2-0a63-4975-b7d1-05cb07423c33" alt="Desempenho_1M" width="100%" />
 </a>
 
-### Analise de Desempenho
+#### Análise de Desempenho 1M:
 
-  Esta seção detalha o comportamento das funções hash frente à Sondagem Linear. Como essa estratégia exige a busca de slots adjacentes em caso de colisão, a eficiência do sistema depende diretamente da qualidade da distribuição dos índices.
+  O gráfico de 1 milhão ilustra a inviabilidade técnica das funções Divisão, Multiplicação e Mid-Square, que precisaram ser retiradas do benchmark pois o tempo para conclusão do teste seria impraticável. O gráfico então foca na comparação direta entre DJB2 e Polinomial. Ambas demonstram resiliência e escalabilidade, conseguindo processar o volume máximo mantendo a estabilidade. Curiosamente, a Polinomial chega a apresentar uma leve vantagem sobre si mesma no cenário de Anagramas nas operações de inserção (Put) e busca (Get), mas de forma geral, ambas provam ser as únicas escolhas viáveis para indexar grandes volumes de texto sob a estratégia de endereçamento aberto.
 
-1. O Impacto do Agrupamento Primário
+## Conclusão
 
-  Quando as funções Divisão, Multiplicação e Mid-Square geram agrupamentos (especialmente em cenários de Anagramas), ocorre o fenômeno de Agrupamento Primário (primary clustering).Isso preenche a tabela com blocos contíguos de dados, obrigando o algoritmo a percorrer um número crescente de posições a cada operação. Esse efeito cascata degrada a performance de $O(1)$ para $O(n)$, explicando o aumento drástico no tempo de execução observado nos gráficos.
 
-2. Resiliência das Funções Especializadas (DJB2 e Polinomial)
-
-  As funções DJB2 e Polinomial mantiveram desempenho estável ao distribuir as chaves de forma uniforme. Ao minimizar o agrupamento, elas permitem que a Sondagem Linear encontre um slot disponível rapidamente, mantendo os tempos de acesso próximos ao esperado para $O(1)$, independentemente do volume de dados.
-
-3. Inviabilidade Técnica no Volume de 1 Milhão
-
-  Nos testes com 1 milhão de elementos, as funções Divisão, Multiplicação e Mid-Square não tiveram seus dados coletados.Com o aumento da carga, o tempo necessário para encontrar um slot vazio em uma tabela com alto índice de agrupamento tornou-se proibitivo para o JMH.A interrupção desses testes foi uma decisão metodológica para garantir a viabilidade da automação, confirmando que tais funções são tecnicamente inadequadas para grandes volumes de dados do tipo String sob a estratégia de sondagem linear.

@@ -26,6 +26,7 @@
   Como funciona: A implementação utiliza o Método de Horner, que processa a palavra caractere por caractere. A cada iteração, o valor acumulado é multiplicado por uma base prima (ex: 31) e somado ao valor da próxima letra. Isso permite que o cálculo seja feito em tempo linear $O(n)$ sem operações pesadas de potência.
 
   ### Função de hash MidSquare
+  Função hash que utiliza o método do quadrado do meio, esse método gera o valor hash a partir do quadrado da chave de entrada. A tecnica consiste em elevar a chave ao quadrado, e em seguida extrair os digitos centrais desse valor para formar o indice da tabela hash.
 
   ### Função de hash DJB2
 
@@ -39,7 +40,14 @@ Para garantir a confiabilidade dos resultados, foram adotadas três estratégias
   
 ## Resultado do BenchMark
 
-### Entrada int:
+### Entrada int (Introdução):
+
+Para fazer essa análise foram realizados experimentos com três quantidades de conjunto de dados: 10 mil, 100 mil,  e 1 milhão de elementos. Além disso, as entradas foram formadas por trez variações de tamanho: 6, 7 e 9 dígitos. Para cada cenário foram testados três fatores de carga da tabela hash: 0.5, 0.75 e 0.9.
+Os conjuntos de dados foram formados por diferentes características de entrada, incluindo valores com distribuição uniforme e entradas com padrões específicos. Essa variação permite observar como cada método de hashing se comporta em cenários distintos, identificando possíveis vantagens ou limitações de cada abordagem.
+
+A Partir dos resultados obtidos no experimento, foram gerados gráficos que mostram o desempenho de cada função hash. Abaixo estão as análises realizadas a partir dos gráficos, comparando o desempenho das funções de hash que trabalhamos para cada método:
+
+### Gráficos + Análises (Execução):
 
 Analise Get_fatordecarga
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
@@ -47,11 +55,22 @@ Analise Get_fatordecarga
   <img src="https://github.com/user-attachments/assets/58a7e5f6-c46b-4848-a885-6e00d8ae7307" alt="Get_Fatordecarga" width="100%" />
 </a>  
 
+Com base no gráfico acima, os métodos de Divisão e Multiplicação apresentaram o melhor desempenho durante as buscas. Essas funções mantiveram os tempos médios de resposta mais baixos e estáveis, mesmo com o aumento crítico do volume de dados e do fator de carga.
+A função Mid-Square apresentou desempenho significativamente inferior em todos os cenários analisados. O tempo médio por operação disparou conforme o conjunto de dados cresceu, atingindo a marca de 1 segundo nos cenários de maior estresse.
+As funções DJB2 e Polinomial apresentaram desempenho intermediário. Embora consigam manter tempos de resposta controlados em tabelas menores ou com baixa ocupação, elas demonstram uma perda de eficiência acentuada quando o fator de carga atinge 0.9.  
+
+
 Analise GetAll_tamanho
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/94c35309-935c-4db8-9947-963e98311fb9" target="_blank">
   <img src="https://github.com/user-attachments/assets/94c35309-935c-4db8-9947-963e98311fb9" alt="Get_tamanho" width="100%" />
 </a>
+
+
+De acordo com o gráfico, os métodos de Divisão e Multiplicação apresentaram o melhor desempenho em relação ao tamanho da entrada (6, 7 e 9 dígitos). Essas funções mantiveram os tempos médios de resposta mais baixos e constantes, demonstrando uma excelente capacidade de lidar com variações na magnitude das chaves. 
+A função Mid-Square apresentou desempenho significativamente inferior em todos os cenários de tamanho de entrada. O tempo médio por operação escalou de forma agressiva conforme o volume de dados aumentou, atingindo picos próximos a 1 segundo no cenário de 1M de elementos.
+As funções DJB2 e Polinomial apresentaram desempenho intermediário. Embora consigam manter uma performance aceitável com entradas menores e volumes baixos, elas mostram uma sensibilidade maior ao aumento do tamanho das chaves e do conjunto de dados.
+
 
 Analise PutAll_Fatordecarga
 
@@ -60,12 +79,17 @@ Analise PutAll_Fatordecarga
   <img src="https://github.com/user-attachments/assets/5f0b43ed-7e43-4b98-9724-9b554197701c" alt="Put_Fatordecarga" width="100%" />
 </a>
 
+Neste gráfico o Fator de Carga(fc) revela um impacto significativo ao tempo de execuções das funções. Em fc = 0.5 todos os hashes mantêm um tempo de execução mesmo ao aumentar a quantidade das entradas, o MID-SQUARE em especial não explode se compararmos com os testes por tamanho de entrada. Em fc = 0.75 as funções continuam se comportando bem mesmo com o aumento do fator de carga. Já em fc = 0.9 a situação de todas piora, com o destaque do aumento significativo para DJB2 e POLINOMIAL que se aproximam de 1s para entradas de 1000000. 
+DIVISÃO e MULTIPLICAÇÃO mantém o crescimento de suas barras de forma proporcional ao n, que é o comportamento ideal para uma tabela hash.
+
 Analise PutAll_tamanho
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/5b081318-a542-4100-89d9-fc087529518e" target="_blank">
   <img src="https://github.com/user-attachments/assets/5b081318-a542-4100-89d9-fc087529518e" alt="Put_tamanho" width="100%" />
 </a>
+
+O gráfico mostra consistência para todos os tamanhos de entradas, com destaque para as funções de MULTIPLICAÇÃO e DIVISÃO, que mantém tempos em centenas de microssegundos mesmo para quantidade 1000000 de entradas, enquanto se destaca negativamente o MID-SQUARE, que em testes com 100k de entradas já explode chegando a centenas de milissegundos e também é perceptível que em 9 dígitos o mesmo piora relativamente mais que os outros. No cenário UNIFORME as funções DJB2 E POLINOMIAL sobem significativamente em 1000000. O cenário PADRÃO é mais rápido para quase todos os hashes, em exceção ao MID-SQUARE e ao DJB2 para entradas de 100k.
 
 Analise RemoveAll_Fatordecarga
 
@@ -74,6 +98,8 @@ Analise RemoveAll_Fatordecarga
   <img src="https://github.com/user-attachments/assets/f84be536-c9a2-4655-b78f-ad0625fad9cf" alt="Remove_Fatordecarga" width="100%" />
 </a>
 
+Este gráfico mostra melhor a sensibilidade ao Fator de Carga(fc) das funções hashes. Em fc = 0.5 o cenário é mais tranquilo, até o MID-SQUARE fica na casa das centenas de milissegundos em 1000000, o que ainda é controlável. Em fc = 0.75 a comparação entre os hashes continua clara, com MID-SQUARE pior que os demais em 10k e 100k de entradas, já para 1000000 de entradas o POLINOMIAL explode, o que pode indicar um ponto crítico da função. Em fc = 0.9 todos estão piorando, MID-SQUARE e POLINOMIAL ultrapassam 1s em 1000000, e DJB2 tem cenário próximo a isso. O POLINOMIAL supera o MID-SQUARE em alguns casos de remoção UNIFORME para fc = 0.9 o que indica que para remoções com tabela muito cheia e distribuição aleatória, o POLINOMIAL tem comportamento ruim. DIVISÃO e MULTIPLICAÇÃO continuam com tempo consideravelmente pequeno , na casa dos milissegundos, confirmando ser escolhas seguras.
+
 Analise RemoveAll_tamanho
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
@@ -81,12 +107,20 @@ Analise RemoveAll_tamanho
   <img src="https://github.com/user-attachments/assets/ebeb69e9-4fff-446c-85e2-ba61f9858eaf" alt="Remove_tamanho" width="100%" />
 </a>
 
+A remoção demonstra um quadro mais dramático que a inserção. O MID-SQUARE em 1000000 atinge valores acima de 1s para todos tamanhos e o POLINOMIAL no cenário UNIFORME sobe agressivamente, ultrapassando 1s no tamanho de 6 dígitos e mantém-se próximo nos demais. A informação mais interessante é que o DJB2 no UNIFORME aparece visivelmente abaixo que no PADRÃO, sugerindo que o mesmo lida melhor com chaves aleatórias que com chaves padrões. A DIVISÃO e MULTIPLICAÇÃO continuam sendo mais estáveis, variando em tempo na casa dos milissegundos mesmo em 1000000.
+
+### Gráficos + Análises (Colisões):
 Analise colisoes getAll
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/0a089fa5-16fe-4294-8d08-82cfd8440be2" target="_blank">
   <img src="https://github.com/user-attachments/assets/0a089fa5-16fe-4294-8d08-82cfd8440be2" alt="Colisoes_Get" width="100%" />
 </a>
+
+Com base nos resultados apresentados no gráfico, é possivel concluir que as funções hash Divisão e Multiplicação apresentaram o melhor desempenho, mantendo baixos níveis de colisão mesmo com o aumento do fator de carga e do tamanho do conjunto de dados.
+As funções DJB2 e Polinomial apresentaram desempenho intermediário, com crescimento gradual de colisões conforme a tabela se torna mais carregada.
+Por outro lado, a função Mid-Square demonstrou desempenho significativamente inferior, apresentando um número muito elevado de colisões em todos os cenários analisados.
+
 
 Analise colisoes putAll
 
@@ -95,6 +129,10 @@ Analise colisoes putAll
   <img src="https://github.com/user-attachments/assets/e3755ba6-d47c-43ee-87dc-3a4c1234dc08" alt="Colisoes_Put" width="100%" />
 </a>
 
+Conforme mostra o gráfico, os métodos de Divisão e Multiplicação apresentaram o melhor desempenho nas inserções, os dois mantiveram um crescimento mais controlado no número de colisões mesmo com o aumento do fator de carga e do tamanho do conjunto de dados.
+A função Mid-Square apresentou desempenho significativamente inferior em todos os cenários analisados. O número de colisões gerado por essa técnica foi consideravelmente maior quando comparado às demais funções.
+As funções DJB2 e Polinomial apresentaram desempenho intermediário. Embora o número de colisões aumente conforme o fator de carga e o tamanho da tabela crescem, essas funções ainda conseguem manter um comportamento mais equilibrado do que o observado na função Mid-Square.
+
 Analise colisoes removeAll
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
@@ -102,7 +140,9 @@ Analise colisoes removeAll
   <img src="https://github.com/user-attachments/assets/751daa0b-ca14-48fa-b850-9f848c43a8df" alt="Colisoes_Remove" width="100%" />
 </a>
 
-Ou uma analise Geral dos graficos de Int
+Os resultados no gráfico mostram que os métodos de Divisão e Multiplicação apresentaram o melhor desempenho nas remoções. Essas funções mantiveram o menor índice de colisões e um crescimento controlado, mesmo nos cenários mais críticos de 1M de elementos e fator de carga de 0.9. 
+A função Mid-Square apresentou um desempenho catastrófico e significativamente inferior em todos os cenários de remoção.
+As funções DJB2 e Polinomial apresentaram desempenho intermediário. Embora consigam manter um comportamento muito mais equilibrado do que a Mid-Square, elas demonstram uma sensibilidade maior ao aumento do fator de carga e ao volume de dados, onde o número de colisões começa a se distanciar das funções de  Divisão e Multiplicação.
 
 ### Introdução aos Cenários com Strings
 

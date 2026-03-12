@@ -114,21 +114,21 @@ Visando viabilizar a coleta de dados e o tempo total de execução do benchmark,
 
 ## Colisões
 
-Colisoes_10k:
+### Colisoes_10k:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/f8138afb-a6cd-413d-b9cd-85a74d40c93d" target="_blank">
   <img src="https://github.com/user-attachments/assets/f8138afb-a6cd-413d-b9cd-85a74d40c93d" alt="Colisoes_10k" width="100%" />
 </a>
 
-Colisoes_100k:
+### Colisoes_100k:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/1deaf224-4108-460a-ad27-592d7579798d" target="_blank">
   <img src="https://github.com/user-attachments/assets/1deaf224-4108-460a-ad27-592d7579798d" alt="Colisoes_100k" width="100%" />
 </a>
 
-Colisoes_1M:
+### Colisoes_1M:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/4bf7f9dc-2d99-44f6-a7d2-0357e41bd63b" target="_blank">
@@ -143,19 +143,19 @@ O Colapso das Funções Simples: As funções Divisão, Multiplicação e Mid-Sq
 A Estabilidade de DJB2 e Polinomial: Ambas mantiveram índices de colisão extremamente baixos e constantes. Como utilizam o processamento posicional (Método de Horner e constantes primas), elas garantem que strings diferentes quase nunca ocupem o mesmo índice, mantendo a Tabela Hash saudável mesmo com 1 milhão de elementos.
 
 ## Desempenho(Tempo de execução)
-Desempenho_10k:
+### Desempenho_10k:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/0b41e3bd-e141-48f6-b456-da5d981b90a2" target="_blank">
   <img src="https://github.com/user-attachments/assets/0b41e3bd-e141-48f6-b456-da5d981b90a2" alt="Desempenho_10k" width="100%" />
 </a>
-Desempenho_100k:
+### Desempenho_100k:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/a515f771-33f0-4b46-a50d-98f66bb2fc01" target="_blank">
   <img src="https://github.com/user-attachments/assets/a515f771-33f0-4b46-a50d-98f66bb2fc01" alt="Desempenho_100k" width="100%" />
 </a>
-Desempenho_1M:
+### Desempenho_1M:
 
 *⚠️ Clique na imagem para dar zoom e conseguir ler os detalhes.*
 <a href="https://github.com/user-attachments/assets/abdb79c2-0a63-4975-b7d1-05cb07423c33" target="_blank">

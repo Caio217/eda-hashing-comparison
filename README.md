@@ -28,6 +28,14 @@
   ### Função de hash MidSquare
 
   ### Função de hash DJB2
+
+## Análise de Desempenho e Metodologia de Benchmark
+
+  O desempenho das estruturas foi medido com o JMH (Java Microbenchmark Harness), framework padrão da JVM, escolhido por neutralizar distorções causadas pela compilação JIT e pelo Garbage Collector.
+  
+A análise foi dividida em duas frentes: eficiência matemática (colisões e saltos, contados antes do benchmark) e custo computacional (tempo de execução das operações Put, Get e Remove, medido pelo JMH).
+
+Para garantir a confiabilidade dos resultados, foram adotadas três estratégias: uso de Blackhole para evitar que a JVM descartasse operações por Dead Code Elimination; 2 iterações de aquecimento para estabilizar a execução; e coleta em 1 fork com 3 iterações oficiais, medindo o tempo médio em nanossegundos (Mode.AverageTime).
   
 ## Resultado do BenchMark
 

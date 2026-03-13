@@ -249,3 +249,6 @@ As funções DJB2 e Polinomial apresentaram desempenho intermediário. Embora co
 ## Conclusão
 
 
+### Link para a proposta inicial do projeto
+
+https://docs.google.com/document/d/1McAgqlTyzA-5fwfJNOPwc6OmLkhDPfAJob9Lm05y2U4/edit?usp=sharing

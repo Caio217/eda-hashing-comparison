@@ -37,7 +37,33 @@
 A análise foi dividida em duas frentes: eficiência matemática (colisões e saltos, contados antes do benchmark) e custo computacional (tempo de execução das operações Put, Get e Remove, medido pelo JMH).
 
 Para garantir a confiabilidade dos resultados, foram adotadas três estratégias: uso de Blackhole para evitar que a JVM descartasse operações por Dead Code Elimination; 2 iterações de aquecimento para estabilizar a execução; e coleta em 1 fork com 3 iterações oficiais, medindo o tempo médio em nanossegundos (Mode.AverageTime).
-  
+
+### Para executar o experimento:
+
+ O projeto utiliza um arquivo de configurações chamado config.properties, localizado na raiz do repositório. Nele, você pode alterar os parâmetros do benchmark de forma centralizada, sem precisar modificar o código-fonte. O próprio arquivo contém instruções detalhadas sobre o que cada variável faz.
+
+Passo a Passo para Execução:
+
+#### 1. Configuração Inicial:
+  Edite o arquivo config.properties para definir os cenários e volumes de dados desejados.
+
+#### 2. Geração da Base de Dados:
+  Para garantir a integridade do experimento (reprodutibilidade), a geração de dados foi separada da execução. Para gerar ou renovar os arquivos de entrada, execute:
+
+Bash
+```
+./gerarDados.sh
+```
+
+#### 3. Execução do Benchmark:
+
+  Com os dados gerados, inicie os testes automatizados rodando:
+
+  ```
+./runBenchMark.sh
+  ```
+
+
 ## Resultado do BenchMark
 
 ### Entrada int (Introdução):

@@ -21,14 +21,13 @@
   Função hash que utiliza uma constante fracionária para embaralhar a chave e melhor distribuição dos hashes, funcionando bem para qualquer capacidade da tabela. A constante recomendada é a razão áurea(A ≈ 0.6180339887), sugerida por Knuth por produzir distribuição uniforme.
 
   ### Função de hash polinomial
-  A Função Polinomial foi utilizada para converter Strings em índices de forma eficiente. Em vez de uma soma simples, ela trata a chave como um polinômio onde cada letra tem um peso baseado em sua posição.
-  
-  Como funciona: A implementação utiliza o Método de Horner, que processa a palavra caractere por caractere. A cada iteração, o valor acumulado é multiplicado por uma base prima (ex: 31) e somado ao valor da próxima letra. Isso permite que o cálculo seja feito em tempo linear $O(n)$ sem operações pesadas de potência.
+  A Função Polinomial foi utilizada para converter Strings em índices de forma eficiente. Em vez de uma soma simples, ela trata a chave como um polinômio onde cada letra tem um peso baseado em sua posição. A implementação utiliza o Método de Horner, que processa a palavra caractere por caractere. A cada iteração, o valor acumulado é multiplicado por uma base prima (ex: 31) e somado ao valor da próxima letra. Isso permite que o cálculo seja feito em tempo linear $O(n)$ sem operações pesadas de potência.
 
   ### Função de hash MidSquare
   Função hash que utiliza o método do quadrado do meio, esse método gera o valor hash a partir do quadrado da chave de entrada. A tecnica consiste em elevar a chave ao quadrado, e em seguida extrair os digitos centrais desse valor para formar o indice da tabela hash.
 
   ### Função de hash DJB2
+  Função hash que inicia o cálculo com um valor fixo e percorre a String caractere por caractere, multiplicando o valor do hash por 33 a cada iteração e somado ao valor ASCII do caractere atual. Depois, é feito o módulo pela capacidade da tabela para obter o índice final. Para chaves numéricas, o valor é convertido para String e processado pelo mesmo método.
 
 ## Análise de Desempenho e Metodologia de Benchmark
 
